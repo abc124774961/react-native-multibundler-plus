@@ -1,7 +1,5 @@
 package com.bindo.rn.modules;
 
-import android.content.Context;
-
 import androidx.annotation.NonNull;
 
 import com.facebook.react.AsyncReactActivity;
@@ -10,10 +8,9 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
-import com.reactnative_multibundler.BundleUtils.RnBundle;
+import com.mobilepos.BundleUtils.RnBundle;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class AppModuleUtil extends ReactContextBaseJavaModule {
 

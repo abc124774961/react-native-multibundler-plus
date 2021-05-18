@@ -1,4 +1,4 @@
-package com.reactnative_multibundler.BundleUtils;
+package com.mobilepos.BundleUtils;
 
 public interface UpdateProgressListener {
     public void updateProgressChange(int precent);

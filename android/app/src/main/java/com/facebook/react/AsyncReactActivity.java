@@ -21,10 +21,10 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.modules.core.PermissionAwareActivity;
 import com.facebook.react.modules.core.PermissionListener;
-import com.reactnative_multibundler.BundleUtils.FileUtils;
-import com.reactnative_multibundler.BundleUtils.RnBundle;
-import com.reactnative_multibundler.BundleUtils.ScriptLoadUtil;
-import com.reactnative_multibundler.BundleUtils.UpdateProgressListener;
+import com.mobilepos.BundleUtils.FileUtils;
+import com.mobilepos.BundleUtils.RnBundle;
+import com.mobilepos.BundleUtils.ScriptLoadUtil;
+import com.mobilepos.BundleUtils.UpdateProgressListener;
 
 import java.io.File;
 

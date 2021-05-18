@@ -2,7 +2,7 @@ package com.reactnative_multibundler.activity;
 
 
 import com.facebook.react.AsyncReactActivity;
-import com.reactnative_multibundler.BundleUtils.RnBundle;
+import com.mobilepos.BundleUtils.RnBundle;
 
 public class Buz2Activity extends AsyncReactActivity {
     /**

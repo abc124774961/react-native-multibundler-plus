@@ -1,4 +1,4 @@
-package com.reactnative_multibundler.BundleUtils;
+package com.mobilepos.BundleUtils;
 
 import android.app.Activity;
 import android.content.Context;

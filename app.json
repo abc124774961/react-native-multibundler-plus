@@ -1,5 +1,5 @@
 {
-  "name": "reactnative_multibundler",
-  "displayName": "reactnative_multibundler",
   "entryModule": "mpos-system-entry"
+  "name": "MobilePos",
+  "displayName": "MobilePos"
 }

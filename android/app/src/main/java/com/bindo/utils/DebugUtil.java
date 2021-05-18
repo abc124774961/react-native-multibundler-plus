@@ -6,7 +6,6 @@ import com.facebook.react.ReactApplication;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.devsupport.interfaces.DevSupportManager;
 import com.facebook.react.devsupport.interfaces.PackagerStatusCallback;
-import com.reactnative_multibundler.BuildConfig;
 
 public class DebugUtil {
 

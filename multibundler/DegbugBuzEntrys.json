@@ -1,5 +1,7 @@
 [
-  "./index.js",
-  "./index2.js",
-  "./index3.js"
+  "modules/mpos-desktop/index.js",
+  "modules/mpos-shopping/index.js",
+  "modules/mpos-system-entry/index.js",
+  "modules/kiosk-system-entry/index.js",
+  "modules/settings/index.js"
 ]

@@ -1,5 +1,6 @@
 {
-  "index.js":100000,
-  "index2.js":200000,
-  "index3.js":300000
+  "modules/mpos-shopping/index.js": 200000,
+  "modules/mpos-system-entry/index.js": 300000,
+  "modules/kiosk-system-entry/index.js": 400000,
+  "modules/settings/index.js": 500000
 }

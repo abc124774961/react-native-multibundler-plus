@@ -1,0 +1,10 @@
+{
+  "name": "mpos-shopping",
+  "version": "1.0.0",
+  "moduleType": "module",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@bindo/rn-framework": "^1.0.0"
+  }
+}

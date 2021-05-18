@@ -13,7 +13,7 @@
 #import "objc/runtime.h"
 #import <React/CoreModulesPlugins.h>
 
-static const BOOL MULTI_DEBUG = NO;//如果画要调试，需设置成YES
+static const BOOL MULTI_DEBUG = YES;//如果画要调试，需设置成YES
 static NSMutableArray* loadedScripts = nil;
 static RCTBridge *rctBridge = nil;
 

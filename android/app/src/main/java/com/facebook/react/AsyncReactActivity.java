@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2015-present, Facebook, Inc.
- *
+ * <p>
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
@@ -21,10 +21,10 @@ import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.modules.core.PermissionAwareActivity;
 import com.facebook.react.modules.core.PermissionListener;
-import com.reactnative_multibundler.FileUtils;
-import com.reactnative_multibundler.RnBundle;
-import com.reactnative_multibundler.ScriptLoadUtil;
-import com.reactnative_multibundler.UpdateProgressListener;
+import com.reactnative_multibundler.BundleUtils.FileUtils;
+import com.reactnative_multibundler.BundleUtils.RnBundle;
+import com.reactnative_multibundler.BundleUtils.ScriptLoadUtil;
+import com.reactnative_multibundler.BundleUtils.UpdateProgressListener;
 
 import java.io.File;
 
@@ -36,14 +36,16 @@ import javax.annotation.Nullable;
 public abstract class AsyncReactActivity extends androidx.fragment.app.FragmentActivity
         implements DefaultHardwareBackBtnHandler, PermissionAwareActivity {
 
-    public enum ScriptType {ASSET,FILE,NETWORK}
+    public enum ScriptType {ASSET, FILE, NETWORK}
 
-    private final ReactActivityDelegate mDelegate;
+    private ReactActivityDelegate mDelegate;
     protected boolean bundleLoaded = false;
     private AlertDialog mProgressDialog;
+    //ReactActivityDelegate onCreate是否初始化
+    private boolean mDelegateOnCreateIsInit = false;
+    private boolean mDelegateIsCallOnResume = false;
 
     protected AsyncReactActivity() {
-        mDelegate = createReactActivityDelegate();
     }
 
     /**
@@ -51,15 +53,17 @@ public abstract class AsyncReactActivity extends androidx.fragment.app.FragmentA
      * This is used to schedule rendering of the component.
      * e.g. "MoviesApp"
      */
-    final private @Nullable String getMainComponentNameInner() {
-        if(!bundleLoaded &&
-                getBundle().scriptType==ScriptType.NETWORK){
+    final private @Nullable
+    String getMainComponentNameInner() {
+        if (!bundleLoaded &&
+                getBundle().scriptType == AsyncReactActivity.ScriptType.NETWORK) {
             return null;
         }
         return getMainComponentName();
     }
 
-    protected @Nullable String getMainComponentName() {
+    protected @Nullable
+    String getMainComponentName() {
         return null;
     }
 
@@ -72,31 +76,35 @@ public abstract class AsyncReactActivity extends androidx.fragment.app.FragmentA
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (this.mDelegate == null) {
+            this.mDelegate = createReactActivityDelegate();
+        }
+
         super.onCreate(savedInstanceState);
-        final ReactInstanceManager manager = ((ReactApplication)getApplication()).getReactNativeHost().getReactInstanceManager();
+        final ReactInstanceManager manager = ((ReactApplication) getApplication()).getReactNativeHost().getReactInstanceManager();
         if (!manager.hasStartedCreatingInitialContext()
-        ||ScriptLoadUtil.getCatalystInstance(getReactNativeHost())==null) {
+                || ScriptLoadUtil.getCatalystInstance(getReactNativeHost()) == null) {
             manager.addReactInstanceEventListener(new ReactInstanceManager.ReactInstanceEventListener() {
                 @Override
                 public void onReactContextInitialized(ReactContext context) {
                     loadScript(new LoadScriptListener() {
                         @Override
-                        public void onLoadComplete(boolean success,String scriptPath) {
+                        public void onLoadComplete(boolean success, String scriptPath) {
                             bundleLoaded = success;
-                            if(success)
+                            if (success)
                                 runApp(scriptPath);
                         }
                     });
                     manager.removeReactInstanceEventListener(this);
                 }
             });
-            ((ReactApplication)getApplication()).getReactNativeHost().getReactInstanceManager().createReactContextInBackground();
-        }else{
+            ((ReactApplication) getApplication()).getReactNativeHost().getReactInstanceManager().createReactContextInBackground();
+        } else {
             loadScript(new LoadScriptListener() {
                 @Override
-                public void onLoadComplete(boolean success,String scriptPath) {
+                public void onLoadComplete(boolean success, String scriptPath) {
                     bundleLoaded = success;
-                    if(success)
+                    if (success)
                         runApp(scriptPath);
                 }
             });
@@ -106,14 +114,14 @@ public abstract class AsyncReactActivity extends androidx.fragment.app.FragmentA
 
     protected abstract RnBundle getBundle();
 
-    protected void runApp(String scriptPath){
-        if(scriptPath!=null){
-            scriptPath = "file://"+scriptPath.substring(0,scriptPath.lastIndexOf(File.separator)+1);
+    protected void runApp(String scriptPath) {
+        if (scriptPath != null) {
+            scriptPath = "file://" + scriptPath.substring(0, scriptPath.lastIndexOf(File.separator) + 1);
         }
         final String path = scriptPath;
         final RnBundle bundle = getBundle();
-        final ReactInstanceManager reactInstanceManager = ((ReactApplication)getApplication()).getReactNativeHost().getReactInstanceManager();
-        if(bundle.scriptType == ScriptType.NETWORK){//如果是网络加载的话，此时正在子线程
+        final ReactInstanceManager reactInstanceManager = ((ReactApplication) getApplication()).getReactNativeHost().getReactInstanceManager();
+        if (bundle.scriptType == AsyncReactActivity.ScriptType.NETWORK && ScriptLoadUtil.MULTI_DEBUG == false) {//如果是网络加载的话，此时正在子线程
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -131,26 +139,26 @@ public abstract class AsyncReactActivity extends androidx.fragment.app.FragmentA
         }
     }
 
-    protected void loadScript(final LoadScriptListener loadListener){
-        final RnBundle bundle = getBundle();
+    public void loadScript(final LoadScriptListener loadListener, RnBundle bundle) {
+//        final RnBundle bundle = getBundle();
         /** all buz module is loaded when in debug mode*/
-        if(ScriptLoadUtil.MULTI_DEBUG){//当设置成debug模式时，所有需要的业务代码已经都加载好了
-            loadListener.onLoadComplete(true,null);
+        if (ScriptLoadUtil.MULTI_DEBUG) {//当设置成debug模式时，所有需要的业务代码已经都加载好了
+            loadListener.onLoadComplete(true, null);
             return;
         }
         ScriptType pathType = bundle.scriptType;
         String scriptPath = bundle.scriptUrl;
         final CatalystInstance instance = ScriptLoadUtil.getCatalystInstance(getReactNativeHost());
-        if(pathType== ScriptType.ASSET) {
-            ScriptLoadUtil.loadScriptFromAsset(getApplicationContext(),instance,scriptPath,false);
-            loadListener.onLoadComplete(true,null);
-        }else if(pathType== ScriptType.FILE){
+        if (pathType == ScriptType.ASSET) {
+            ScriptLoadUtil.loadScriptFromAsset(getApplicationContext(), instance, scriptPath, false);
+            loadListener.onLoadComplete(true, null);
+        } else if (pathType == ScriptType.FILE) {
             File scriptFile = new File(getApplicationContext().getFilesDir()
-                    +File.separator+/*ScriptLoadUtil.REACT_DIR+File.separator+*/scriptPath);
+                    + File.separator +/*ScriptLoadUtil.REACT_DIR+File.separator+*/scriptPath);
             scriptPath = scriptFile.getAbsolutePath();
-            ScriptLoadUtil.loadScriptFromFile(scriptPath,instance,scriptPath,false);
-            loadListener.onLoadComplete(true,scriptPath);
-        }else if(pathType== ScriptType.NETWORK){
+            ScriptLoadUtil.loadScriptFromFile(scriptPath, instance, scriptPath, false);
+            loadListener.onLoadComplete(true, scriptPath);
+        } else if (pathType == ScriptType.NETWORK) {
             initView();
             AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
             dialogBuilder.setTitle("Loading jsBundle");
@@ -159,7 +167,7 @@ public abstract class AsyncReactActivity extends androidx.fragment.app.FragmentA
             tvv.setText("conneting");//由于demo中把文件放在了github上，所以http建立连接要花好几秒时间
             tvv.setTextColor(Color.BLACK);
             tvv.setGravity(Gravity.CENTER);
-            tvv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT));
+            tvv.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             dialogBuilder.setView(tvv);
             mProgressDialog = dialogBuilder.create();
             mProgressDialog.show();
@@ -170,7 +178,7 @@ public abstract class AsyncReactActivity extends androidx.fragment.app.FragmentA
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if(tvv!=null) {
+                            if (tvv != null) {
                                 tvv.setText(String.valueOf(precent));
                             }
                         }
@@ -179,7 +187,7 @@ public abstract class AsyncReactActivity extends androidx.fragment.app.FragmentA
 
                 @Override
                 public void complete(boolean success) {
-                    if(mProgressDialog!=null){
+                    if (mProgressDialog != null) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -188,27 +196,39 @@ public abstract class AsyncReactActivity extends androidx.fragment.app.FragmentA
                             }
                         });
                     }
-                    if(!success){
-                        loadListener.onLoadComplete(false,null);
+                    if (!success) {
+                        loadListener.onLoadComplete(false, null);
                         return;
                     }
                     String info = FileUtils.getCurrentPackageMd5(getApplicationContext());
-                    String bundlePath = FileUtils.getPackageFolderPath(getApplicationContext(),info);
-                    String jsBundleFilePath = FileUtils.appendPathComponent(bundlePath,bundle.scriptPath);
+                    String bundlePath = FileUtils.getPackageFolderPath(getApplicationContext(), info);
+                    String jsBundleFilePath = FileUtils.appendPathComponent(bundlePath, bundle.scriptPath);
                     File bundleFile = new File(jsBundleFilePath);
-                    if(bundleFile!=null&&bundleFile.exists()){
-                        ScriptLoadUtil.loadScriptFromFile(jsBundleFilePath,instance,jsBundleFilePath,false);
-                    }else{
-                        success=false;
+                    if (bundleFile != null && bundleFile.exists()) {
+                        ScriptLoadUtil.loadScriptFromFile(jsBundleFilePath, instance, jsBundleFilePath, false);
+                    } else {
+                        success = false;
                     }
-                    loadListener.onLoadComplete(success,jsBundleFilePath);
+                    loadListener.onLoadComplete(success, jsBundleFilePath);
                 }
             });
         }
     }
 
-    protected void initView(){
+
+    public void loadScript(final LoadScriptListener loadListener) {
+        final RnBundle bundle = getBundle();
+        this.loadScript(loadListener, bundle);
+    }
+
+
+    protected void initView() {
         mDelegate.onCreate(null);
+        this.mDelegateOnCreateIsInit = true;
+        if (mDelegateIsCallOnResume) {
+            onResume();
+            mDelegateIsCallOnResume = false;
+        }
     }
 
     @Override
@@ -220,7 +240,11 @@ public abstract class AsyncReactActivity extends androidx.fragment.app.FragmentA
     @Override
     protected void onResume() {
         super.onResume();
-        mDelegate.onResume();
+        if (this.mDelegateOnCreateIsInit)
+            mDelegate.onResume();
+        else {
+            mDelegateIsCallOnResume = true;
+        }
     }
 
     @Override

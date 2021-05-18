@@ -58,7 +58,7 @@
   [buz1 addTarget:self action:@selector(goBuz1:) forControlEvents:UIControlEventTouchUpInside];
   [buz2 addTarget:self action:@selector(goBuz2:) forControlEvents:UIControlEventTouchUpInside];
   [buz3 addTarget:self action:@selector(goBuz3:) forControlEvents:UIControlEventTouchUpInside];
-  //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadBuzBundle) name:@"RCTJavaScriptDidLoadNotification" object:nil];//如果只是要进入app立马加载rn可以用该方法
+//  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loadBuzBundle) name:@"RCTJavaScriptDidLoadNotification" object:nil];//如果只是要进入app立马加载rn可以用该方法
   return YES;
 }
 
@@ -92,8 +92,8 @@
   controller = [[ReactController alloc] initWithURL:bundleUrl path:bundleName type:type moduleName:moduleName];
   [mainViewController.navigationController pushViewController:controller animated:YES];
 }
-/*
--(void)loadBuzBundle{//如果只是要进入app立马加载rn可以用该方法
+
+-(void)loadBuzBundle{ //如果只是要进入app立马加载rn可以用该方法
   NSLog(@"RCTCXXBridge loadBuzBundle");
   if(isBuzLoaded){
     return;
@@ -112,7 +112,7 @@
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   isBuzLoaded = YES;
-}*/
+}
 
 @end
 

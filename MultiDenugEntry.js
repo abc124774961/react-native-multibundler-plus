@@ -1,33 +1,49 @@
 import {AppRegistry} from 'react-native';
+import { AppModule } from '@bindo/rn-framework';
 /** @format */
 
-import {} from 'react-native';
-import App from './App';
-import {name as appName} from './app.json';
+import { } from '@bindo/rn-framework';
+import mposDeskTop from './modules/mpos-desktop/App';
+import appDesktopConfig from './modules/mpos-desktop/package.json';
 
-AppRegistry.registerComponent(appName, () => App);
+
+
+
+
+AppModule.registerModule("mpos-desktop", () => mposDeskTop, appDesktopConfig);
+
 /** @format */
 
-import {} from 'react-native';
-import App2 from './App2';
+import { } from '@bindo/rn-framework';
+import appShopping from './modules/mpos-shopping/App';
+import appShoppingConfig, { name as shoppingName } from './modules/mpos-shopping/package.json';
 
-AppRegistry.registerComponent("reactnative_multibundler2", () => App2);
+
+AppModule.registerModule(shoppingName, () => appShopping, appShoppingConfig);
+
 /** @format */
 
-import {} from 'react-native';
-import {createStackNavigator} from "react-navigation";
-import {App3_1,App3_2} from "./App3";
-const App3 = createStackNavigator({
-  App3_1: {screen: App3_1},
-  App3_2: {screen: App3_2}
-}, {
-  navigationOptions: {
-    showIcon: true,
-    swipeEnabled: false,
-    animationEnabled: false,
-    lazy: true,
-  },
-  mode: 'card'
-});
+import { } from '@bindo/rn-framework';
+import appSidebar from './modules/mpos-system-entry/App';
+import appSideBaronfig, { name as sideBarName } from './modules/mpos-system-entry/package.json';
 
-AppRegistry.registerComponent("reactnative_multibundler3", () => App3);
+
+AppModule.registerAppModule(sideBarName, () => appSidebar, appSideBaronfig);
+
+/** @format */
+
+import { } from '@bindo/rn-framework';
+import appKisok from './modules/kiosk-system-entry/App';
+import appKioskConfig, { name as kioskName } from './modules/kiosk-system-entry/package.json';
+
+AppModule.registerModule(kioskName, () => appKisok, appKioskConfig);
+
+/** @format */
+
+import { } from '@bindo/rn-framework';
+import appSettings from './modules/settings/App';
+import appSettingsConfig, { name as SettingsName } from './modules/settings/package.json';
+
+
+AppModule.registerModule(SettingsName, () => appSettings, appSettingsConfig);
+

@@ -1,0 +1,10 @@
+{
+  "name": "mpos-system-entry",
+  "version": "1.0.0",
+  "main": "index.js",
+  "moduleType": "app-module",
+  "license": "MIT",
+  "dependencies": {
+    "@bindo/rn-framework": "^1.0.0"
+  }
+}

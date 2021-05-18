@@ -112,8 +112,7 @@ function ModuleComponent(...args) {
 
 
 export class AppModuleComponent extends PureComponent {
-
-    static ComponentType = "AppModuleComponent"
+ 
     static ModuleName = ""
 
     constructor(props) {

@@ -28,12 +28,17 @@ build/
 .gradle
 local.properties
 *.iml
+android/**/*node_modules*
+android/**/raw/*.json
+android/**/assets/*.json
 
 # node.js
 #
 node_modules/
 npm-debug.log
 yarn-error.log
+*lock.json
+*.lock
 
 # BUCK
 buck-out/

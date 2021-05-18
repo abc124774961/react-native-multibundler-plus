@@ -1,5 +1,5 @@
 {
-  "entryModule": "mpos-system-entry"
   "name": "MobilePos",
-  "displayName": "MobilePos"
+  "displayName": "MobilePos",
+  "entryModule": "mpos-system-entry"
 }

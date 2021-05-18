@@ -13,7 +13,7 @@ import com.facebook.react.bridge.BridgeUtil;
 import com.facebook.react.bridge.CatalystInstance;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.reactnative_multibundler.BuildConfig;
+import com.mobilepos.BuildConfig;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -25,7 +25,9 @@ import java.util.Set;
 public class ScriptLoadUtil {
     protected final static String TAG = "ScriptLoadUtil";
     public static final String REACT_DIR = "react_bundles";
-    /** set this value when debug,you can set BuildConfig.DEBUG if need*/
+    /**
+     * set this value when debug,you can set BuildConfig.DEBUG if need
+     */
     public static final boolean MULTI_DEBUG = BuildConfig.DEBUG;//需要debug的时候设置成true,你也可以设置成跟BuildConfig.DEBUG一致
     private static Set<String> sLoadedScript = new HashSet<>();
 
@@ -73,19 +75,19 @@ public class ScriptLoadUtil {
     public static CatalystInstance getCatalystInstance(ReactNativeHost host) {
         ReactInstanceManager manager = host.getReactInstanceManager();
         if (manager == null) {
-            Log.e(TAG,"manager is null!!");
+            Log.e(TAG, "manager is null!!");
             return null;
         }
 
         ReactContext context = manager.getCurrentReactContext();
         if (context == null) {
-            Log.e(TAG,"context is null!!");
+            Log.e(TAG, "context is null!!");
             return null;
         }
         return context.getCatalystInstance();
     }
 
-    public static void setJsBundleAssetPath(ReactContext reactContext, String bundleAssetPath){
+    public static void setJsBundleAssetPath(ReactContext reactContext, String bundleAssetPath) {
         reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit("sm-bundle-changed", bundleAssetPath);
@@ -97,27 +99,27 @@ public class ScriptLoadUtil {
     }
 
     public static void loadScriptFromAsset(Context context,
-                                    CatalystInstance instance,
-                                    String assetName,boolean isSync) {
+                                           CatalystInstance instance,
+                                           String assetName, boolean isSync) {
         if (sLoadedScript.contains(assetName)) {
             return;
         }
-        BridgeUtil.loadScriptFromAsset(context,instance,assetName,isSync);
+        BridgeUtil.loadScriptFromAsset(context, instance, assetName, isSync);
         sLoadedScript.add(assetName);
     }
 
     public static void loadScriptFromFile(String fileName,
-                                           CatalystInstance instance,
-                                           String sourceUrl,boolean isSync) {
+                                          CatalystInstance instance,
+                                          String sourceUrl, boolean isSync) {
         if (sLoadedScript.contains(sourceUrl)) {
             return;
         }
-        BridgeUtil.loadScriptFromFile(fileName,instance,sourceUrl,isSync);
+        BridgeUtil.loadScriptFromFile(fileName, instance, sourceUrl, isSync);
         sLoadedScript.add(sourceUrl);
     }
 
-    public static void clearLoadedRecord(){
-        if(sLoadedScript!=null){
+    public static void clearLoadedRecord() {
+        if (sLoadedScript != null) {
             sLoadedScript.clear();
         }
     }

@@ -3,18 +3,6 @@ import { AppModule } from '@bindo/rn-framework';
 /** @format */
 
 import { } from '@bindo/rn-framework';
-import mposDeskTop from './modules/mpos-desktop/App';
-import appDesktopConfig from './modules/mpos-desktop/package.json';
-
-
-
-
-
-AppModule.registerModule("mpos-desktop", () => mposDeskTop, appDesktopConfig);
-
-/** @format */
-
-import { } from '@bindo/rn-framework';
 import appShopping from './modules/mpos-shopping/App';
 import appShoppingConfig, { name as shoppingName } from './modules/mpos-shopping/package.json';
 

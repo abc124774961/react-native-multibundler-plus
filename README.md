@@ -6,7 +6,7 @@
 metro官方：https://facebook.github.io/metro/
 
 
-支持react native 0.57~0.61.5，由于采用的是官方metro拆包，理论上日后的rn版本无需修改就能兼容
+支持react native 0.57~0.63.2，由于采用的是官方metro拆包，理论上日后的rn版本无需修改就能兼容
 
 iOS和Android都有加载多bundle实例，经测试稳定可靠
 
@@ -18,7 +18,8 @@ iOS和Android都有加载多bundle实例，经测试稳定可靠
 
      3、直接运行android或iOS项目，jsbundle包已经事先打好
      
-<img src="https://github.com/smallnew/react-native-multibundler/raw/master/demo.gif" width="250" alt="Demo Android"></img>
+<img src="https://github.com/smallnew/react-native-multibundler/raw/master/imgs/readme/demo-android.gif" width="250" alt="Demo Android"></img>
+<img src="https://github.com/smallnew/react-native-multibundler/raw/master/imgs/readme/demo-ios.gif" width="250" alt="Demo iOS"></img>
      
 
 ### 如何接入原有项目：
@@ -114,7 +115,7 @@ iOS和Android都有加载多bundle实例，经测试稳定可靠
 1、该功能顺便把"不同业务包放在不同目录下的需求"给解决了，这个也归功于新的react-native-smartassets
 2、远程的bundle加载功能并没有做md5校验，这个需要开发者自己解决，主要由于md5主要还是需要服务端返回的信息，
 作为通用的拆包开源项目不会提供md5校验
-3、rn 0.62版本经测试会出现爆红的问题，主要是因为新增的LogBox模块擅自runApplication导致崩溃，不过RN的master分支已经添加了开关，后续是能够兼容的
+3、rn 0.62版本经测试会出现爆红的问题，主要是因为新增的LogBox模块擅自runApplication导致崩溃，最新的RN版本0.63已经没有该问题
 
 ```
 ### js项目结构：
@@ -178,19 +179,19 @@ iOS和Android都有加载多bundle实例，经测试稳定可靠
 ### UI打包(现在支持mac os，windows)：
      使用方式：下载https://github.com/smallnew/RN-MultiBundler-UI，并根据项目中的readme来运行
      选择打包选项后点击打包,该方法可代替命令打包并帮助计算业务包依赖并去重
-<img src="https://github.com/smallnew/react-native-multibundler/raw/master/package-ui-demo.png" width="650" alt="Demo Android"></img>
+<img src="https://github.com/smallnew/react-native-multibundler/raw/master/imgs/readme/package-ui-demo.png" width="650" alt="Demo Android"></img>
 
 
 打包命令如下：
 ## android
 ### 打android基础包
-node ./node_modules/react-native/local-cli/cli.js bundle --platform android --dev false --entry-file platformDep.js --bundle-output ./android/app/src/main/assets/platform.android.bundle --assets-dest android/app/src/main/res/ --config /{你的绝对路径}/platform57.config.js
+node ./node_modules/react-native/local-cli/cli.js bundle --platform android --dev false --entry-file platformDep.js --bundle-output ./android/app/src/main/assets/platform.android.bundle --assets-dest android/app/src/main/res/ --config /{你的绝对路径}/platform.config.js
 ### 打android业务包
-node ./node_modules/react-native/local-cli/cli.js bundle --platform android --dev false --entry-file index.js --bundle-output ./android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/ --config /{你的绝对路径}/buz57.config.js
+node ./node_modules/react-native/local-cli/cli.js bundle --platform android --dev false --entry-file index.js --bundle-output ./android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/ --config /{你的绝对路径}/buz.config.js
 
 
 ## iOS
 ### 打iOS基础包
-node ./node_modules/react-native/local-cli/cli.js bundle --platform ios --dev false --entry-file platformDep.js --bundle-output ./ios/platform.ios.bundle --assets-dest ./ios/ --config /{你的绝对路径}/platform57.config.js
+node ./node_modules/react-native/local-cli/cli.js bundle --platform ios --dev false --entry-file platformDep.js --bundle-output ./ios/platform.ios.bundle --assets-dest ./ios/ --config /{你的绝对路径}/platform.config.js
 ### 打iOS业务包
-node ./node_modules/react-native/local-cli/cli.js bundle --platform ios --dev false --entry-file index.js --bundle-output ./ios/index.ios.bundle --assets-dest ./ios/ --config /{你的绝对路径}/buz57.config.js
+node ./node_modules/react-native/local-cli/cli.js bundle --platform ios --dev false --entry-file index.js --bundle-output ./ios/index.ios.bundle --assets-dest ./ios/ --config /{你的绝对路径}/buz.config.js
